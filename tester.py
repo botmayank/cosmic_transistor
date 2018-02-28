@@ -35,7 +35,9 @@ while True:
     for i in range(len(PINS)):
         reading.append(str(GPIO.input(PINS[i])))
 
-    csv_reading = str(now) + ", " + ",".join(reading) + "\n"    
+    csv_reading = str(now) + ", " + ",".join(reading) + "\n" 
+    file.write(csv_reading)
+      
     file.flush()
     time.sleep(SLEEP_TIME)
 
