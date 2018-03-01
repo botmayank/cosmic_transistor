@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 import RPi.GPIO as GPIO
 
-LOG_FILE = "/media/pi/MISHO/data_log.csv"
+LOG_FILE = "/media/pi/MISHO/DATA/data_log.csv"
 
 PINS = [27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18,\
          23, 24, 25, 8, 7, 12, 16, 20, 21]
