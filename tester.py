@@ -9,7 +9,7 @@ import spidev
 
 FILENAME = "data_log_" + str(datetime.now()) + ".csv"
 
-LOG_FILE = "./data_readings/" + FILENAME
+LOG_FILE = "/home/pi/adc_test/Data/" + FILENAME
 
 # PINS = [27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18,\
          # 23, 24, 25, 8, 7, 12, 16, 20, 21]
@@ -42,7 +42,7 @@ for i in range(len(PINS)):
 csv_header = ",".join(mosfet_header)
 # print csv_header
 
-csv_header = csv_header + "Gate Voltage,Supply Voltage"
+csv_header = csv_header + ",Gate Voltage,Supply Voltage"
 
 csv_header = "Time," + csv_header + "\n"
 # print csv_header
@@ -71,7 +71,7 @@ while True:
     print "------------CONFIG READING-----------------"
     print config_reading
 
-    csv_reading = str(now) + ", " + pins_reading + config_reading + "\n"
+    csv_reading = str(now) + "," + pins_reading + "," + config_reading + "\n"
 
     file.write(csv_reading)
       
