@@ -5,12 +5,19 @@ from datetime import datetime
 import RPi.GPIO as GPIO
 import spidev
 
-LOG_FILE = "/media/pi/MISHO/DATA/data_log.csv"
+# LOG_FILE = "/media/pi/MISHO/DATA/data_log.csv"
 
-PINS = [27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18,\
-         23, 24, 25, 8, 7, 12, 16, 20, 21]
+FILENAME = "data_log_" + str(datetime.now()) + ".csv"
 
-CHANNELS = [0,1,2,3,4]
+LOG_FILE = "./data_readings/" + FILENAME
+
+# PINS = [27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18,\
+         # 23, 24, 25, 8, 7, 12, 16, 20, 21]
+
+PINS = [27, 22, 5, 6, 13, 19, 26, 18,\
+         23, 24, 25, 7, 12, 16, 20, 21]
+
+CHANNELS = [0,1]
 
 GPIO.setmode(GPIO.BCM)
 mosfet_header = []
@@ -35,6 +42,8 @@ for i in range(len(PINS)):
 csv_header = ",".join(mosfet_header)
 # print csv_header
 
+csv_header = csv_header + "Gate Voltage,Supply Voltage"
+
 csv_header = "Time," + csv_header + "\n"
 # print csv_header
 
@@ -53,15 +62,16 @@ while True:
     for i in range(len(CHANNELS)):
         setting.append(str(readadc(CHANNELS[i])))
 
-    config_reading = ",".join(setting) + "\n"
-
-    csv_reading = str(now) + ", " + ",".join(reading) + "\n" 
+    config_reading = ",".join(setting)
+    pins_reading = ",".join(reading)
 
     print "-------------PINS READING------------------"
-    print csv_reading
+    print pins_reading
 
     print "------------CONFIG READING-----------------"
     print config_reading
+
+    csv_reading = str(now) + ", " + pins_reading + config_reading + "\n"
 
     file.write(csv_reading)
       
