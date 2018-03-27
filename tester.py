@@ -34,16 +34,24 @@ def readadc(adcnum):
         return -1
     r = spi.xfer2([1, 8 + adcnum << 4, 0])
     data = ((r[1] & 3) << 8) + r[2]
-    return data
+    if adcnum == 0:
+        data_manipulation_gate(data)
+        return data
+    elif adcnum == 1:
+        data_manipulation_1200V(data):
+        return data
 
 def data_manipulation(data):
-    readadc(data)
     if data > threshold_high:
          return data = 0
     elif threshold_low_low < data < threshold_low_high:
          return data = -5
     else:
          return data
+
+def data_manipulation_1200V(data):
+    data *= 310
+    return data
 
 for i in range(len(PINS)):
     GPIO.setup(PINS[i], GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
