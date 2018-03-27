@@ -4,6 +4,9 @@ import time
 from datetime import datetime
 import RPi.GPIO as GPIO
 import spidev
+def threshold_high = 955
+def threshold_low_low = 365
+def threshold_low_high = 508
 
 # LOG_FILE = "/media/pi/MISHO/DATA/data_log.csv"
 
