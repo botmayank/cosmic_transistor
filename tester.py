@@ -8,8 +8,6 @@ def threshold_high = 955
 def threshold_low_low = 365
 def threshold_low_high = 508
 
-# LOG_FILE = "/media/pi/MISHO/DATA/data_log.csv"
-
 FILENAME = "data_log_" + str(datetime.now()) + ".csv"
 
 LOG_FILE = "/home/pi/adc_test/Data/" + FILENAME
