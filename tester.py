@@ -89,7 +89,7 @@ while True:
     print "------------CONFIG READING-----------------"
     print config_reading
 
-    csv_reading = str(now) + "," + pins_reading + "," + config_reading + "\n"
+    csv_reading = str(data_manipulation_1200V(data))
 
     file.write(csv_reading)
       
