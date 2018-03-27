@@ -38,6 +38,15 @@ def readadc(adcnum):
     data = ((r[1] & 3) << 8) + r[2]
     return data
 
+def data_manipulation(data):
+    readadc(data)
+    if data > threshold_high:
+         return data = 0
+    elif threshold_low_low < data < threshold_low_high:
+         return data = -5
+    else:
+         return data
+
 for i in range(len(PINS)):
     GPIO.setup(PINS[i], GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
     mosfet_header.append("MOSFET" + str(i+1))
@@ -63,7 +72,7 @@ while True:
         reading.append(str(GPIO.input(PINS[i])))
 
     for i in range(len(CHANNELS)):
-        setting.append(str(readadc(CHANNELS[i])))
+        setting.append(str(data_manipulation(CHANNELS[i])))
 
     config_reading = ",".join(setting)
     pins_reading = ",".join(reading)
