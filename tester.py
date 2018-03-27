@@ -41,7 +41,7 @@ def readadc(adcnum):
         data_manipulation_1200V(data):
         return data
 
-def data_manipulation(data):
+def data_manipulation_gate(data):
     if data > threshold_high:
          return data = 0
     elif threshold_low_low < data < threshold_low_high:
