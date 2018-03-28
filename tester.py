@@ -43,8 +43,8 @@ def modify_gate_reading(data):
     return data
 
 def modify_supply_reading(data):
-    # 10 bit ADC: 1023 / V_ADC (3.3) = 310
-    return data*310
+    # supply voltage: 1200V / 10 bit ADC: 1023 ==> 1200/1023=1.173
+    return data*1.173
 
 for i in range(len(PINS)):
     GPIO.setup(PINS[i], GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
