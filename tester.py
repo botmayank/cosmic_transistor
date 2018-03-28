@@ -4,9 +4,6 @@ import time
 from datetime import datetime
 import RPi.GPIO as GPIO
 import spidev
-def threshold_high = 955
-def threshold_low_low = 365
-def threshold_low_high = 508
 
 FILENAME = "data_log_" + str(datetime.now()) + ".csv"
 
@@ -18,7 +15,13 @@ LOG_FILE = "/home/pi/adc_test/Data/" + FILENAME
 PINS = [27, 22, 5, 6, 13, 19, 26, 18,\
          23, 24, 25, 7, 12, 16, 20, 21]
 
-CHANNELS = [0,1]
+GATE_CHANNEL = 0
+SUPPLY_CHANNEL = 1
+
+GATE_THRESH_HIGH = 955
+
+GATE_THRESH_LOW_UPPER = 508
+GATE_THRESH_LOW_LOWER = 365
 
 GPIO.setmode(GPIO.BCM)
 mosfet_header = []
@@ -34,24 +37,18 @@ def readadc(adcnum):
         return -1
     r = spi.xfer2([1, 8 + adcnum << 4, 0])
     data = ((r[1] & 3) << 8) + r[2]
-    if adcnum == 0:
-        data_manipulation_gate(data)
-        return data
-    elif adcnum == 1:
-        data_manipulation_1200V(data):
-        return data
-
-def data_manipulation_gate(data):
-    if data > threshold_high:
-         return data = 0
-    elif threshold_low_low < data < threshold_low_high:
-         return data = -5
-    else:
-         return data
-
-def data_manipulation_1200V(data):
-    data *= 310
     return data
+
+def modify_gate_reading(data):
+    if data >= GATE_THRESH_HIGH:        
+        data = 0
+    elif (GATE_THRESH_LOW_LOWER <= data <= GATE_THRESH_LOW_UPPER):
+        data = -5
+    return data
+
+def modify_supply_reading(data):
+    # Change 310 to V_ADC*V_Supply etc type something
+    return data*310
 
 for i in range(len(PINS)):
     GPIO.setup(PINS[i], GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
@@ -74,11 +71,17 @@ while True:
     reading = []
     setting = []
 
+    gate_data = readadc(GATE_CHANNEL)
+    supply_data = readadc(SUPPLY_CHANNEL)
+
+    gate_data = modify_gate_reading(gate_data)
+    supply_data = modify_supply_reading(supply_data)
+
     for i in range(len(PINS)):
         reading.append(str(GPIO.input(PINS[i])))
 
-    for i in range(len(CHANNELS)):
-        setting.append(str(data_manipulation(CHANNELS[i])))
+    setting.append(str(gate_data))
+    setting.append(str(supply_data))
 
     config_reading = ",".join(setting)
     pins_reading = ",".join(reading)
@@ -89,7 +92,7 @@ while True:
     print "------------CONFIG READING-----------------"
     print config_reading
 
-    csv_reading = str(data_manipulation_1200V(data))
+    csv_reading = pins_reading +"," + config_reading
 
     file.write(csv_reading)
       
