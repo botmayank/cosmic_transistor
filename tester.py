@@ -93,7 +93,7 @@ while True:
     print "------------CONFIG READING-----------------"
     print config_reading
 
-    csv_reading = pins_reading +"," + config_reading
+    csv_reading = str(now) + ","+ pins_reading +"," + config_reading
 
     file.write(csv_reading)
       
