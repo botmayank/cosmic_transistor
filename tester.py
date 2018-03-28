@@ -5,10 +5,6 @@ from datetime import datetime
 import RPi.GPIO as GPIO
 import spidev
 
-FILENAME = "data_log_" + str(datetime.now()) + ".csv"
-
-LOG_FILE = "/home/pi/adc_test/Data/" + FILENAME
-
 # PINS = [27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18,\
          # 23, 24, 25, 8, 7, 12, 16, 20, 21]
 
@@ -47,7 +43,7 @@ def modify_gate_reading(data):
     return data
 
 def modify_supply_reading(data):
-    # Change 310 to V_ADC*V_Supply etc type something
+    # 10 bit ADC: 1023 / V_ADC (3.3) = 310
     return data*310
 
 for i in range(len(PINS)):
@@ -62,6 +58,22 @@ csv_header = csv_header + ",Gate Voltage,Supply Voltage"
 csv_header = "Time," + csv_header + "\n"
 # print csv_header
 
+setting = []
+
+gate_data = readadc(GATE_CHANNEL)
+supply_data = readadc(SUPPLY_CHANNEL)
+
+gate_data = modify_gate_reading(gate_data)
+supply_data = modify_supply_reading(supply_data)
+
+setting.append(str(gate_data))
+setting.append(str(supply_data))
+
+config_reading = ",".join(setting)
+
+FILENAME = "data_log_" + str(supply_data) + ".csv"
+LOG_FILE = "/home/pi/adc_test/Data/" + FILENAME
+
 file = open(LOG_FILE, "a")
 if os.stat(LOG_FILE).st_size == 0:
     file.write(csv_header)
@@ -69,21 +81,10 @@ if os.stat(LOG_FILE).st_size == 0:
 while True:
     now = datetime.now()
     reading = []
-    setting = []
-
-    gate_data = readadc(GATE_CHANNEL)
-    supply_data = readadc(SUPPLY_CHANNEL)
-
-    gate_data = modify_gate_reading(gate_data)
-    supply_data = modify_supply_reading(supply_data)
 
     for i in range(len(PINS)):
         reading.append(str(GPIO.input(PINS[i])))
 
-    setting.append(str(gate_data))
-    setting.append(str(supply_data))
-
-    config_reading = ",".join(setting)
     pins_reading = ",".join(reading)
 
     print "-------------PINS READING------------------"
