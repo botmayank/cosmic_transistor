@@ -71,7 +71,7 @@ setting.append(str(supply_data))
 
 config_reading = ",".join(setting)
 
-FILENAME = "data_log_" + str(supply_data) + ".csv"
+FILENAME = "data_log_" + str(supply_data) + "_" + str(datetime.now()) + ".csv"
 LOG_FILE = "/home/pi/adc_test/Data/" + FILENAME
 
 file = open(LOG_FILE, "a")
