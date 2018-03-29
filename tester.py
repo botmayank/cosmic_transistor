@@ -5,11 +5,8 @@ from datetime import datetime
 import RPi.GPIO as GPIO
 import spidev
 
-# PINS = [27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 18,\
-         # 23, 24, 25, 8, 7, 12, 16, 20, 21]
-
-PINS = [27, 22, 5, 6, 13, 19, 26, 18,\
-         23, 24, 25, 7, 12, 16, 20, 21]
+PINS = [27, 22, 10, 9, 11, 5, 6, 13, 19, 26,\
+         18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
 
 GATE_CHANNEL = 0
 SUPPLY_CHANNEL = 1
